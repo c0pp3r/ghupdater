@@ -92,14 +92,21 @@ def postSpawn(token, name, res, planet, CR, CD, DR, FL, HR, MA, PE, OQ, SR, UT, 
 	print result
 
 def removeDespawned(token, gal = galaxy):
+    ghNames = getAllGHResourceNames() #returns set of GH resource names
+    #print(ghNames)
+    serverNames = getAllServerResourceNames() #returns a set of resource names from custom output file 
+    #print(serverNames)
+    resources = ghNames - serverNames #remove all the names from gh set that exist in server set, = all despawned resources
     #print(len(ghNames),len(serverNames),len(ghNames)-len(serverNames),len(resources))
     for res in resources:
         #print(token,res,gal)
         url = url = 'http://galaxyharvester.net/markUnavailable.py?galaxy=' + gal + '&spawn=' + res + '&planets=all&gh_sid=' + token
         response = urllib2.urlopen(url)
         resp = response.read().decode('utf-8')
+        print(res + ": " + resp) #GH responds with name of resource on sucsess and with error message on error
         
         
+def getAllGHResourceNames(gal = galaxy, filename = None): #retrives the xml GH produces every morning of all active resources on server or pass a filename to use local file
     if filename == None:
         url = 'http://galaxyharvester.net/exports/current' + gal + '.xml'
         response = urllib2.urlopen(url)
@@ -119,6 +126,7 @@ def removeDespawned(token, gal = galaxy):
         unqNames.add(n.text)
     return unqNames
    
+def getAllServerResourceNames(filename = serverFilename): # returns a set of names from the server xml file
     tree = ET.parse(filename)
     root = tree.getroot()
     if root.tag != "SpawnOutput":
@@ -129,6 +137,7 @@ def removeDespawned(token, gal = galaxy):
         for child in res:
             if child.tag == "SpawnName":
                 serverNames.add(str.lower(child.text))
+                break #once we have the SpawnName child, go to next resource
     return serverNames
 
 token = login()
