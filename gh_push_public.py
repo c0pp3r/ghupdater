@@ -76,8 +76,6 @@ def readSpawnOutput(token):
 		postSpawn(token, name, res, planet, CR, CD, DR, FL, HR, MA, PE, OQ, SR, UT, ER)
 
 def postSpawn(token, name, res, planet, CR, CD, DR, FL, HR, MA, PE, OQ, SR, UT, ER):
-	if planet == 'yavin4':
-		planet = 'yaviniv'
 	url = "http://galaxyharvester.net/postResource.py?galaxy=" + galaxy + "&planet=" + planet + "&resName=" + name + "&resType=" + res + "&CR=" + CR + "&CD=" + CD + "&DR=" + DR + "&FL=" + FL + "&HR=" + HR + "&MA=" + MA + "&PE=" + PE + "&OQ=" + OQ + "&SR=" + SR + "&UT=" + UT + "&ER=" + ER
 
 
